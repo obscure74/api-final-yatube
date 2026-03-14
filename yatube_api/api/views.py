@@ -1,13 +1,13 @@
+"""Вьюсеты для обработки запросов к API приложения Yatube."""
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, mixins, permissions, viewsets
+from rest_framework.pagination import LimitOffsetPagination
 
+from api.permissions import IsAuthorOrReadOnly
+from api.serializers import (
+    CommentSerializer, FollowSerializer, GroupSerializer, PostSerializer
+)
 from posts.models import Group, Post
-
-from .pagination import MaybeLimitOffsetPagination
-from .permissions import IsAuthorOrReadOnly
-from .serializers import (CommentSerializer, FollowSerializer,
-                          GroupSerializer,
-                          PostSerializer)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -19,9 +19,10 @@ class PostViewSet(viewsets.ModelViewSet):
         IsAuthorOrReadOnly,
         permissions.IsAuthenticatedOrReadOnly
     ]
-    pagination_class = MaybeLimitOffsetPagination
+    pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
+        """Устанавливает автора поста при его создании."""
         serializer.save(author=self.request.user)
 
 
@@ -33,15 +34,18 @@ class CommentViewSet(viewsets.ModelViewSet):
         IsAuthorOrReadOnly,
         permissions.IsAuthenticatedOrReadOnly
     ]
-    pagination_class = None
+
+    def get_post(self):
+        """Получает пост, к которому относятся комментарии."""
+        return get_object_or_404(Post, pk=self.kwargs.get('post_id'))
 
     def get_queryset(self):
-        post = get_object_or_404(Post, pk=self.kwargs.get('post_id'))
-        return post.comments.all()
+        """Получает комментарии, относящиеся к конкретному посту."""
+        return self.get_post().comments.all()
 
     def perform_create(self, serializer):
-        post = get_object_or_404(Post, pk=self.kwargs.get('post_id'))
-        serializer.save(author=self.request.user, post=post)
+        """Устанавливает автора комментария и связывает его с постом."""
+        serializer.save(author=self.request.user, post=self.get_post())
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
@@ -49,8 +53,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
-    pagination_class = None
+    permission_classes = [permissions.AllowAny]
 
 
 class FollowViewSet(
@@ -61,13 +64,14 @@ class FollowViewSet(
     """Вьюсет для управления подписками пользователя."""
 
     serializer_class = FollowSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = (filters.SearchFilter,)
     search_fields = ('following__username', 'user__username')
-    pagination_class = None
 
     def get_queryset(self):
+        """Получает список подписок текущего пользователя."""
         return self.request.user.follower.all()
 
     def perform_create(self, serializer):
+        """Устанавливает текущего пользователя при создании подписки."""
         serializer.save(user=self.request.user)

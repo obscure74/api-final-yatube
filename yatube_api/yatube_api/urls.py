@@ -1,3 +1,4 @@
+"""URL-конфигурация для проекта Yatube API."""
 from django.contrib import admin
 from django.urls import include, path
 

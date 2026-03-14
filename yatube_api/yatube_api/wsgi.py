@@ -1,3 +1,5 @@
+"""Конфигурация WSGI для проекта Yatube API."""
+
 import os
 
 from django.core.wsgi import get_wsgi_application

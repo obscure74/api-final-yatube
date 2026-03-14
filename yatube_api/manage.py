@@ -1,8 +1,10 @@
+"""Управление проектом Yatube API через командную строку."""
 import os
 import sys
 
 
 def main():
+    """Запускает административные задачи."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yatube_api.settings')
     try:
         from django.core.management import execute_from_command_line

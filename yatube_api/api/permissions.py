@@ -1,22 +1,13 @@
+"""Модуль описания прав доступа для API."""
 from rest_framework import permissions
 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
-    """
-    Разрешает редактирование только автору объекта.
-    Остальные — только чтение.
-    """
-    def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.author == request.user
+    """Разрешает чтение всем, а редактирование только автору."""
 
-
-class IsAuthorOrReadOnlyForComment(permissions.BasePermission):
-    """
-    Для комментариев: автор или владелец поста может редактировать.
-    """
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return obj.author == request.user or obj.post.author == request.user
+        """Проверяет наличие прав у пользователя на действие с объектом."""
+        return (
+            request.method in permissions.SAFE_METHODS
+            or obj.author == request.user
+        )
