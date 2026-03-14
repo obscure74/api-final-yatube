@@ -63,7 +63,8 @@ POST /api/v1/jwt/create/
 
 ```
 2. Получение списка постов (пагинация включена)
-GET /api/v1/posts/?limit=2&offset=0
+```GET /api/v1/posts/?limit=2&offset=0
+```
 Ответ:
 ```JSON
 {
