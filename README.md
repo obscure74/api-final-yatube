@@ -102,3 +102,14 @@ POST /api/v1/follow/
     "following": "author_username"
 }
 ```
+
+### Документация API
+
+После локального запуска проекта документация в формате Redoc будет доступна по адресу:
+
+```http://127.0.0.1:8000/redoc/```
+
+### Автор
+
+Будкина Ксения
+[obscure74](https://github.com/obscure74)
