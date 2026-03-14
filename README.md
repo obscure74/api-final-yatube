@@ -45,14 +45,13 @@ python manage.py runserver
 ### Примеры запросов к API
 
 1. Получение JWT-токена
-POST /api/v1/jwt/create/
+```POST /api/v1/jwt/create/```
 Тело запроса:
 ```JSON
 {
     "username": "your_username",
     "password": "your_password"
 }
-
 ```
 Ответ:
 ```JSON
@@ -60,11 +59,9 @@ POST /api/v1/jwt/create/
     "refresh": "eyJ0eXAiOiJKV1QiLCJhbG...",
     "access": "eyJ0eXAiOiJKV1QiLCJhbG..."
 }
-
 ```
 2. Получение списка постов (пагинация включена)
-
-GET /api/v1/posts/?limit=2&offset=0
+```GET /api/v1/posts/?limit=2&offset=0```
 
 Ответ:
 ```JSON
@@ -93,9 +90,10 @@ GET /api/v1/posts/?limit=2&offset=0
 }
 ```
 3. Подписка на автора
-POST /api/v1/follow/
+```POST /api/v1/follow/```
 Тело запроса:
 ```JSON
 {
     "following": "author_username"
 }
+```
