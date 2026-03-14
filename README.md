@@ -19,55 +19,53 @@ REST API для платформы Yatube. Проект позволяет вз�
 ```bash
 git clone [https://github.com/obscure74/api_final_yatube.git](https://github.com/obscure74/api_final_yatube.git)
 cd api_final_yatube
+
+```
 Cоздать и активировать виртуальное окружение:
-
-Bash
-
+```bash
 python -m venv venv
 source venv/Scripts/activate  # Для Windows: venv/Scripts/activate
+
+```
 Установить зависимости из файла requirements.txt:
-
-Bash
-
+```bash
 pip install -r requirements.txt
+
+```
 Выполнить миграции:
-
-Bash
-
+```bash
 python manage.py migrate
+
+```
 Запустить проект:
-
-Bash
-
+```bash
 python manage.py runserver
 
+```
 ### Примеры запросов к API
 
 1. Получение JWT-токена
 POST /api/v1/jwt/create/
 Тело запроса:
-
-JSON
-
+```JSON
 {
     "username": "your_username",
     "password": "your_password"
 }
+
+```
 Ответ:
-
-JSON
-
+```JSON
 {
     "refresh": "eyJ0eXAiOiJKV1QiLCJhbG...",
     "access": "eyJ0eXAiOiJKV1QiLCJhbG..."
 }
 
+```
 2. Получение списка постов (пагинация включена)
 GET /api/v1/posts/?limit=2&offset=0
 Ответ:
-
-JSON
-
+```JSON
 {
     "count": 100,
     "next": "[http://127.0.0.1:8000/api/v1/posts/?limit=2&offset=2](http://127.0.0.1:8000/api/v1/posts/?limit=2&offset=2)",
@@ -91,13 +89,11 @@ JSON
         }
     ]
 }
-
+```
 3. Подписка на автора
 POST /api/v1/follow/
 Тело запроса:
-
-JSON
-
+```JSON
 {
     "following": "author_username"
 }
